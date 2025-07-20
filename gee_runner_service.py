@@ -9,17 +9,18 @@ import ee
 import re
 import json
 from dotenv import load_dotenv
+import base64
 load_dotenv('.env.local')
 
 # Set your service account and key path here
 SERVICE_ACCOUNT = os.environ.get('GEE_SERVICE_ACCOUNT')
-KEY_JSON = os.environ.get('GEE_KEY_JSON')
-if not SERVICE_ACCOUNT or not KEY_JSON:
-    raise RuntimeError('GEE_SERVICE_ACCOUNT and GEE_KEY_JSON environment variables must be set')
-# Write the key to a temp file
+KEY_B64 = os.environ.get('GEE_KEY_JSON_B64')
+if not SERVICE_ACCOUNT or not KEY_B64:
+    raise RuntimeError('GEE_SERVICE_ACCOUNT and GEE_KEY_JSON_B64 environment variables must be set')
+# Write the decoded key to a temp file
 KEY_PATH = os.path.join(tempfile.gettempdir(), 'gee_service_account.json')
-with open(KEY_PATH, 'w') as f:
-    f.write(KEY_JSON)
+with open(KEY_PATH, 'wb') as f:
+    f.write(base64.b64decode(KEY_B64))
 
 # Authenticate with GEE once at startup
 def gee_auth():
