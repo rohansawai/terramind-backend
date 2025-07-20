@@ -14,9 +14,9 @@ load_dotenv('.env.local')
 
 # Set your service account and key path here
 SERVICE_ACCOUNT = os.environ.get('GEE_SERVICE_ACCOUNT')
-KEY_B64 = os.environ.get('GEE_KEY_JSON_B64')
+KEY_B64 = os.environ.get('GEE_KEY_JSON')
 if not SERVICE_ACCOUNT or not KEY_B64:
-    raise RuntimeError('GEE_SERVICE_ACCOUNT and GEE_KEY_JSON_B64 environment variables must be set')
+    raise RuntimeError('GEE_SERVICE_ACCOUNT and GEE_KEY_JSON environment variables must be set')
 # Write the decoded key to a temp file
 KEY_PATH = os.path.join(tempfile.gettempdir(), 'gee_service_account.json')
 with open(KEY_PATH, 'wb') as f:
