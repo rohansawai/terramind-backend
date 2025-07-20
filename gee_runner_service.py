@@ -8,10 +8,18 @@ import os
 import ee
 import re
 import json
+from dotenv import load_dotenv
+load_dotenv('.env.local')
 
 # Set your service account and key path here
-SERVICE_ACCOUNT = 'terramind-backend@celtic-defender-461219-j5.iam.gserviceaccount.com'
-KEY_PATH = '/Users/sawairohan90/TerraMind/celtic-defender-461219-j5-ed983bf91afc.json'
+SERVICE_ACCOUNT = os.environ.get('GEE_SERVICE_ACCOUNT')
+KEY_JSON = os.environ.get('GEE_KEY_JSON')
+if not SERVICE_ACCOUNT or not KEY_JSON:
+    raise RuntimeError('GEE_SERVICE_ACCOUNT and GEE_KEY_JSON environment variables must be set')
+# Write the key to a temp file
+KEY_PATH = os.path.join(tempfile.gettempdir(), 'gee_service_account.json')
+with open(KEY_PATH, 'w') as f:
+    f.write(KEY_JSON)
 
 # Authenticate with GEE once at startup
 def gee_auth():

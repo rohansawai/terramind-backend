@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+.env.*
+
+# Google service account keys
+celtic-defender-461219-j5-ed983bf91afc.json
+*.json
+
+# Railway local config
+railway.json 
