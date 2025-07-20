@@ -46,8 +46,15 @@ TILE_URL_REGEX = re.compile(r"https://earthengine\.googleapis\.com/[^\s]+/\{z\}/
 
 @app.post('/run')
 async def run_code(req: CodeRequest):
-    # Only run the user code, do not prepend authentication (already handled at startup)
-    full_code = req.code
+    # Prepend GEE authentication to user code for subprocess
+    gee_auth_code = f'''
+import ee
+service_account = "{SERVICE_ACCOUNT}"
+key_path = "{KEY_PATH}"
+credentials = ee.ServiceAccountCredentials(service_account, key_path)
+ee.Initialize(credentials)
+'''
+    full_code = gee_auth_code + '\n' + req.code
     # Write the code to a temp file
     with tempfile.NamedTemporaryFile('w', suffix='.py', delete=False) as f:
         f.write(full_code)
